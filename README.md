@@ -1,5 +1,11 @@
 # TaskBoard - Cross-Platform Task Manager
 
+**Przedmiot:** Projektowanie i programowanie aplikacji PWA i mobilnych cross-platform
+**Uczelnia:** WSB Merito, Wrocław
+**Autor:** Krzysztof
+
+---
+
 ## 1. Opis aplikacji
 TaskBoard to wszechstronna aplikacja do zarządzania zadaniami w zespole, wzorowana na tablicach Kanban. Celem projektu jest dostarczenie użytkownikom spójnego doświadczenia na różnych urządzeniach, umożliwiając śledzenie postępów, dodawanie nowych zadań oraz zarządzanie statusem projektów w czasie rzeczywistym.
 
@@ -10,7 +16,7 @@ System opiera się na architekturze klient-serwer i składa się z trzech głów
 * **Aplikacja Mobile:** Multiplatformowa aplikacja mobilna (Android/iOS) komunikująca się z tym samym backendem.
 
 ## 3. Wybrana technologia
-* **Backend:** Express.js (Node.js) + SQLite. Wybrano ze względu na asynchroniczność, wysoką wydajność I/O oraz przenośność bazy SQLite, co idealnie sprawdza się w środowisku deweloperskim i szybkich wdrożeniach.
+* **Backend:** Express.js (Node.js) + SQLite. Wybrano ze względu na asynchroniczność, wysoką wydajność I/O oraz przenośność bazy SQLite, co idealnie sprawdza się w środowisku deweloperskim i wdrożeniach chmurowych (wymuszono kompilację ze źródeł dla pełnej kompatybilności).
 * **PWA:** React. Zapewnia komponentowe podejście, ułatwiając utrzymanie i skalowanie interfejsu.
 * **Mobile:** React Native (Expo). Umożliwia współdzielenie logiki i wzorców projektowych z wersją PWA, znacznie przyspieszając proces developmentu obu platform.
 
@@ -25,54 +31,53 @@ Główne endpointy:
 
 ## 5. Design system
 Interfejs obu klientów oparty jest o minimalistyczny, spójny design system:
-* **Kolorystyka:** Głęboki granat jako kolor bazowy, biel jako tło, akcenty (np. statusy zadań) w pastelowych odcieniach zieleni, żółci i czerwieni.
-* **Typografia:** Rodzina czcionek sans-serif (Inter / Roboto) dbająca o wysoką czytelność na małych i dużych ekranach.
-* **Komponenty:** Własne reużywalne karty zadań z zaokrąglonymi rogami i delikatnymi cieniami.
+* **Kolorystyka:** Głęboki granat jako kolor bazowy, biel jako tło, akcenty w pastelowych odcieniach zieleni, żółci i czerwieni do oznaczania statusów.
+* **Typografia:** Rodzina czcionek sans-serif (Inter / Roboto) dbająca o wysoką czytelność.
+* **Komponenty:** Własne reużywalne karty zadań z zaokrąglonymi rogami i delikatnymi cieniami (współdzielone koncepcyjnie między PWA a aplikacją mobilną).
 
 ## 6. Opis funkcjonalności
-* Obsługa kont użytkowników (rejestracja/logowanie).
-* Dodawanie, edycja, usuwanie zadań (CRUD).
+* Obsługa kont użytkowników (rejestracja i logowanie).
+* Pełna obsługa zadań (operacje CRUD).
 * Zmiana statusu zadania (To Do, In Progress, Done).
-* PWA: Tryb offline (cache'owanie zasobów).
-* Mobile: Integracja z geolokalizacją (np. dodawanie lokalizacji do tworzonego zadania).
-* Spójna synchronizacja danych między obiema platformami.
+* Tryb offline w PWA dzięki Service Workerom i cache'owaniu.
+* Wykorzystanie natywnych funkcji w aplikacji mobilnej (geolokalizacja przy dodawaniu zadania).
+* Bezpośrednia synchronizacja stanu przez wspólne REST API.
 
 ## 7. Zabezpieczenia
-* **Uwierzytelnianie:** Oparte o tokeny JWT (JSON Web Tokens). Endpointy chronione przed dostępem bez nagłówka Authorization.
-* **Hasła:** Przechowywane w bazie w formie zahashowanej (bcrypt).
-* **Walidacja wejścia:** Sprawdzanie danych przesyłanych w ciele żądań POST/PUT, by zapobiec atakom typu SQL Injection/NoSQL Injection.
-* **CORS:** Skonfigurowane polityki ograniczające żądania tylko z autoryzowanych domen klienckich.
+* **Uwierzytelnianie:** Oparte o JSON Web Tokens (JWT). Endpointy chronione są przed dostępem bez odpowiedniego nagłówka Authorization.
+* **Hasła:** Przechowywane w bazie SQLite w formie zahashowanej (użyto bcrypt).
+* **CORS:** Skonfigurowane polityki ograniczające żądania wyłącznie do autoryzowanych domen klienckich.
+* **Walidacja wejścia:** Zapobieganie wstrzykiwaniu złośliwego kodu na etapie żądań HTTP.
 
 ## 8. Testowanie
-Przeprowadzono testy manualne oraz jednostkowe endpointów przy użyciu Postmana. 
-Zgłoszone i naprawione błędy: 
-* Problem z wygasaniem tokenu JWT - dodano poprawne przechwytywanie błędu po stronie PWA.
-* Optymalizacja re-renderowania w React Native podczas przewijania dużej listy zadań.
+Przeprowadzono testy manualne oraz jednostkowe endpointów API (przy użyciu narzędzia Postman). 
+Znalezione i naprawione błędy: 
+* Brak zgodności bibliotek C++ (GLIBC) na serwerach chmurowych rozwiązano poprzez zmianę wersji paczki `sqlite3` oraz wymuszenie kompilacji `--build-from-source`.
+* Wyeliminowano problem z wygasaniem tokenu JWT poprzez poprawne przechwytywanie błędów po stronie klienta (PWA).
 
 ## 9. Zrzuty ekranu
-*(Tu wkleisz linki do screenów, np. umieszczając screeny w folderze docs/ w repozytorium)*
-- [Ekran główny PWA]
-- [Ekran logowania Mobile]
-- [Tablica zadań]
+*Poniżej można dodać bezpośrednie ścieżki do plików, jeśli zrzuty są w folderze /docs*
+* Ekran logowania PWA
+* Widok główny tablicy zadań (Desktop)
+* Widok mobilny aplikacji w Expo Go
 
 ## 10. Instrukcja uruchomienia
-**Linki produkcyjne:**
-* REST API: [WKRÓTCE LINK DO RAILWAY/RENDER]
-* PWA: [WKRÓTCE LINK DO VERCEL]
-* Aplikacja Mobile: Skanuj kod QR w Expo Go z tego linku: [WKRÓTCE LINK DO EXPO]
+**Środowisko Produkcyjne (Działające linki):**
+* **Aplikacja PWA:** https://task-board-cross-platform.vercel.app
+* **REST API (Backend):** https://taskboard-crossplatform.onrender.com
+* **Aplikacja Mobile:** Zgodnie z wytycznymi, aplikację mobilną można uruchomić lokalnie wykorzystując Expo. Należy wejść do folderu `mobile`, wpisać `npx expo start` i zeskanować kod QR w aplikacji Expo Go na telefonie.
 
-**Uruchomienie lokalne:**
+**Uruchomienie w środowisku deweloperskim (Lokalnie):**
 1. Sklonuj repozytorium.
-2. W folderze `backend`: `npm install` -> `npm start`.
-3. W folderze `pwa`: `npm install` -> `npm run dev`.
-4. W folderze `mobile`: `npm install` -> `npx expo start`.
+2. W folderze `backend` uruchom komendę: `npm install`, a następnie `npm start`.
+3. W folderze `pwa` uruchom komendę: `npm install`, a następnie `npm run dev`.
+4. W folderze `mobile` uruchom komendę: `npm install`, a następnie `npx expo start`.
 
 ## 11. Napotkane problemy
-* **Konfiguracja środowiska w macOS:** Problemy z limitami systemowymi `too many open files` w Watchmanie podczas odpalania Expo - rozwiązane przez modyfikację limitów i przeinstalowanie zależności.
-* **Kompatybilność pakietów:** Zgrzyty przy dopasowywaniu wersji React Routera dla wspólnego wykorzystania komponentów nawigacyjnych.
+* **Problemy środowiskowe macOS:** Konieczność obejścia limitów `too many open files` w Watchmanie podczas uruchamiania Expo Go na systemie macOS.
+* **Problemy z wdrożeniem (Deploy):** Błędy kompilacji natywnej biblioteki `sqlite3` na serwerach chmurowych (Render). Problem zażegnano poprzez downgrade paczki oraz manipulację flagami środowiska Node.js.
 
 ## 12. Możliwości rozwoju
-W przyszłości aplikacja mogłaby zostać wzbogacona o:
-* Obsługę powiadomień Push (przypomnienia o upływających terminach zadań).
-* Zmiany w czasie rzeczywistym z wykorzystaniem WebSockets (widoczność edycji tablicy na żywo, gdy pracuje nad nią wiele osób).
-* Dodanie trybu Dark Mode oraz rozszerzenie opcji dostępu do geolokalizacji na etapie edycji zadania.
+* Wdrożenie powiadomień Push przypominających o terminach zadań.
+* Zastosowanie WebSockets do odświeżania tablicy na żywo, gdy pracuje nad nią wielu użytkowników jednocześnie.
+* Integracja Dark Mode z detekcją ustawień systemowych użytkownika.
