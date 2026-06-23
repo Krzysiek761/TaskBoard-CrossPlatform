@@ -3,7 +3,7 @@ import { BrowserRouter, Routes, Route, Link, useNavigate, Navigate } from 'react
 import axios from 'axios';
 import './App.css';
 
-const API = 'http://localhost:3000/api';
+const API = 'https://taskboard-crossplatform.onrender.com/api';
 
 const Login = ({ setToken }) => {
   const [username, setUsername] = useState('');
